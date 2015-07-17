@@ -1,6 +1,7 @@
 import httplib, urllib, json
 from urlparse import urlparse
 import datetime
+import pytz
 import re
 
 DATA_PROVIDER_URL =  "/servlet/SQLDataProviderServer"
@@ -141,9 +142,11 @@ def getContatori(timbrature):
                 print "totalExitTime updated to ",totalExitTime
             precTime = time
 
-        nowTime = datetime.datetime.now().time()
+        nowTime = datetime.datetime.now(pytz.timezone("Europe/Rome")).time()
         nowDateTime = datetime.datetime(time.year, time.month, time.day, nowTime.hour, nowTime.minute, nowTime.second)
+        print "now is ",nowDateTime
         workedTime = nowDateTime - time
+        print "worked time from last timbr to now is ",workedTime
         if dir == Timbratura.VERSO_ENTRATA:
             if (not totalWorkTime):
                 totalWorkTime = workedTime
