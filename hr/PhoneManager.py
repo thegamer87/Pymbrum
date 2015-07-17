@@ -2,6 +2,7 @@ import httplib, urllib, json
 from urlparse import urlparse
 import csv
 import StringIO
+from Memoize import Memoize
 
 DATA_PROVIDER_URL =  "/servlet/SQLDataProviderServer"
 REPORT_PROVIDER_URL = "/servlet/Report"
@@ -138,3 +139,5 @@ def getRubrica(cookie, url, surname):
             entryRubrica = EntryRubrica(surname, code, phone, mobile, email, prefix, presence)
             rubrica.append(entryRubrica)
     return rubrica
+
+getRubrica = Memoize(getRubrica)
