@@ -71,7 +71,7 @@
             {% endif %}
         </div>
         <div class="nav navbar-nav navbar-right">
-            {% if action != "login" %}
+            {%if action and action != "login" %}
                 <form id="logoutForm" action="/logout">
                     <button id="logout-btn" type="submit" class="btn btn-default">Logout <span
                             class="glyphicon glyphicon-log-out"></span></button>
