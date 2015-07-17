@@ -9,7 +9,7 @@ class Memoize:
     def __call__(self, *args):
         cookie, url, surname = args
         if surname:
-            surname = surname.upper(surname)
+            surname = surname.upper()
         keyArgs = (url,surname)
         callTime = datetime.datetime.today()
 
