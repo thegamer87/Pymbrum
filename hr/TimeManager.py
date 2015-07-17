@@ -125,18 +125,20 @@ def getContatori(timbrature):
 
             if dir == Timbratura.VERSO_USCITA:
                 workedTime = time - precTime
-                print "WTIME: ",workedTime
+                print "U timbr readed ... workedTime is: ",workedTime
                 if (not totalWorkTime):
                     totalWorkTime = workedTime
                 else:
                     totalWorkTime += workedTime
+                print "totalWorkTime updated to ",totalWorkTime
             if dir == Timbratura.VERSO_ENTRATA:
                 exitTime = time-precTime
-                print "ETIME: ",exitTime
+                print "E timbr readed ... exitTime is: ",exitTime
                 if (not totalExitTime):
                     totalExitTime = exitTime
                 else:
                     totalExitTime += exitTime
+                print "totalExitTime updated to ",totalExitTime
             precTime = time
 
         nowTime = datetime.datetime.now().time()
@@ -147,22 +149,28 @@ def getContatori(timbrature):
                 totalWorkTime = workedTime
             else:
                 totalWorkTime += workedTime
+            print "last timbr readed is E ... totalWorkTime updated to ",totalWorkTime
         if totalExitTime and totalExitTime < minExitTime:
-            totalWorkTime += minExitTime
+            totalWorkTime -= (minExitTime - totalExitTime)
+            print "exitTime < minExitTime ... totalWorkTime updated to ",totalWorkTime
 
+        print "final totalWorkTime is ",totalWorkTime
+        print "final totalExitTime is ",totalExitTime
 
         timeToExit = dayWorkTime - totalWorkTime
         timeOfExit = nowDateTime + timeToExit
 
-        workedPercent = round((totalWorkTime.total_seconds() * 100) / dayWorkTime.total_seconds())
+        workedPercent = round(totalWorkTime.total_seconds() / dayWorkTime.total_seconds() * 100)
         if workedPercent > 100:
             workedPercent = 100
 
-        print "work percent: ",workedPercent
+        print "final work time percent is: ",workedPercent
 
         timeOfExitString = timeOfExit.strftime(TIME_FORMAT)
         if timeToExit.total_seconds() < 0:
             timeOfExitString = str(timeOfExit.time())+" ... che stracacchio di uno stracacchio ci fai ancora su quella sedia !!!"
+
+        print "final timeOfExit is ",timeOfExit
 
         h,m,s = re.split(":",str(totalWorkTime))
         totalWorkTimeString = h+"h "+m+"m "+s+"s"
@@ -178,6 +186,8 @@ def getContatori(timbrature):
         totalExitTimeString = "0h 0m 0s"
         timeOfExitString = ""
         workedPercentString = "0"
+
+        print "no timbr readed"
     return {"workedTime":totalWorkTimeString, "exitTime":totalExitTimeString, "timeOfExit":timeOfExitString, "workedPercent":workedPercentString}
 
 
