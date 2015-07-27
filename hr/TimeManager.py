@@ -160,8 +160,11 @@ def getContatori(url, timbrature):
             else:
                 totalWorkTime += workedTime
             print "last timbr readed is E ... totalWorkTime updated to ",totalWorkTime
-        if totalExitTime and totalExitTime < companyMinExitTime:
-            totalWorkTime -= (companyMinExitTime - totalExitTime)
+        if not totalExitTime or (totalExitTime and totalExitTime < companyMinExitTime):
+            if not totalExitTime:
+                totalWorkTime -= companyMinExitTime
+            else:
+                totalWorkTime -= (companyMinExitTime - totalExitTime)
             print "exitTime < minExitTime ... totalWorkTime updated to ",totalWorkTime
 
         print "final totalWorkTime is ",totalWorkTime
