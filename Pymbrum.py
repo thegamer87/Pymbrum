@@ -1,5 +1,7 @@
 import json
 import datetime
+from datetime import timedelta
+import Cookie
 
 from flask import Flask
 from flask import request
@@ -45,6 +47,8 @@ def rubrica():
         surname = request.form["surname"]
 
     rubrica = PhoneManager.getRubrica(userSession.cookie, url, surname)
+    if rubrica == False:
+        return render_template("pymbrum.html", action="login", message="Sessione HR scaduta")
 
     rubricaHeaders = ["NOMINATIVO", "UFFICIO", "TELEFONO", "CELLULARE", "EMAIL", "PREFISSO", "PRESENZA"]
     rubricaTemplate = []
@@ -73,7 +77,10 @@ def timbrature():
         isToday = (date == todayDate)
 
         timbrature = TimeManager.getTimbrature(userSession.cookie, url,date)
-        contatori = TimeManager.getContatori(timbrature)
+        if (timbrature == False):
+            return render_template("pymbrum.html", action="login", message="Sessione HR scaduta")
+
+        contatori = TimeManager.getContatori(url, timbrature)
 
         templateHeaders = ["ORA","VERSO"]
         templateTimbrature = []
@@ -103,8 +110,11 @@ def login():
     loginresult = Login.login(url, username, password)
 
     if loginresult.result:
+        loginCookie = Cookie.SimpleCookie().load(loginresult.cookie)
+        print "LOGIN COOKIE: ", loginCookie
         userSession = UserSession(username, url, loginresult.cookie)
         session[sessionKey] = userSession.to_JSON()
+        session.permanent = True
         return timbrature()
     else:
         return render_template("pymbrum.html", action="login", message=loginresult.message)
@@ -117,4 +127,5 @@ def logout():
 if __name__ == '__main__':
     app.debug = True
     app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+    app.permanent_session_lifetime = timedelta(hours=1)
     app.run()

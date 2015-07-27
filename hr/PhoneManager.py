@@ -60,9 +60,13 @@ def getRubrica(cookie, url, surname):
     connection = httplib.HTTPSConnection(host)
     connection.request("POST", path, params, headers)
 
-    response = connection.getresponse().read()
+    response = connection.getresponse()
 
-    responseDict = json.loads(response)
+    responseStatus = response.status
+
+    responseData = response.read()
+
+    responseDict = json.loads(responseData)
 
     rubricaHeaders = responseDict["Fields"]
     rubricaData = responseDict["Data"]

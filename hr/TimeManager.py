@@ -27,8 +27,8 @@ TIMBR_CAUSE_FIELD = "CAUSETIMBR"
 TIMBR_TYPE_FIELD = "TYPETIMBR"
 TIMBR_IP_FIELD = "IPTIMBR"
 
-minExitTime = datetime.timedelta(minutes=30)
-dayWorkTime = datetime.timedelta(hours=7, minutes=12)
+minExitTime = {"https://hr.cineca.it/HRPortal":datetime.timedelta(minutes=30), "https://saas.hrzucchetti.it/hrpmaxmara":datetime.timedelta(hours=1)}
+dayWorkTime={"https://hr.cineca.it/HRPortal":datetime.timedelta(hours=7, minutes=12), "https://saas.hrzucchetti.it/hrpmaxmara":datetime.timedelta(hours=8)}
 
 class Timbratura:
     VERSO_FIELD = "verso"
@@ -67,12 +67,18 @@ def getTimbrature(cookie, url, date):
     connection = httplib.HTTPSConnection(host)
     connection.request("POST", path, params, headers)
 
-    response = connection.getresponse().read()
+    response = connection.getresponse()
 
-    responseDict = json.loads(response)
+    responseStatus = response.status
+
+    responseData = response.read()
+
+    responseDict = json.loads(responseData)
 
     headers = responseDict["Fields"]
     data = responseDict["Data"]
+
+    print "RESPONSE STATUS: ", responseStatus
 
 
     timbrature = []
@@ -107,7 +113,7 @@ def getTimbrature(cookie, url, date):
             timbrature.append(timbratura)
     return timbrature
 
-def getContatori(timbrature):
+def getContatori(url, timbrature):
     totalWorkTime = None
     totalExitTime = None
 
@@ -142,6 +148,7 @@ def getContatori(timbrature):
                 print "totalExitTime updated to ",totalExitTime
             precTime = time
 
+        companyMinExitTime = minExitTime[url]
         nowTime = datetime.datetime.now(pytz.timezone("Europe/Rome")).time()
         nowDateTime = datetime.datetime(time.year, time.month, time.day, nowTime.hour, nowTime.minute, nowTime.second)
         print "now is ",nowDateTime
@@ -153,17 +160,19 @@ def getContatori(timbrature):
             else:
                 totalWorkTime += workedTime
             print "last timbr readed is E ... totalWorkTime updated to ",totalWorkTime
-        if totalExitTime and totalExitTime < minExitTime:
-            totalWorkTime -= (minExitTime - totalExitTime)
+        if totalExitTime and totalExitTime < companyMinExitTime:
+            totalWorkTime -= (companyMinExitTime - totalExitTime)
             print "exitTime < minExitTime ... totalWorkTime updated to ",totalWorkTime
 
         print "final totalWorkTime is ",totalWorkTime
         print "final totalExitTime is ",totalExitTime
 
-        timeToExit = dayWorkTime - totalWorkTime
+        companyDayWorkTime = dayWorkTime[url]
+
+        timeToExit = companyDayWorkTime - totalWorkTime
         timeOfExit = nowDateTime + timeToExit
 
-        workedPercent = round(totalWorkTime.total_seconds() / dayWorkTime.total_seconds() * 100)
+        workedPercent = round(totalWorkTime.total_seconds() / companyDayWorkTime.total_seconds() * 100)
         if workedPercent > 100:
             workedPercent = 100
 

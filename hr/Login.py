@@ -17,6 +17,7 @@ class LoginResult:
         self.message = message
         self.cookie = cookie
 
+
 def login (url, username, password):
     parsedUrl = urlparse(url)
     host = parsedUrl.netloc
@@ -29,6 +30,7 @@ def login (url, username, password):
     connection.request("POST", path, params, headers)
 
     response = connection.getresponse()
+    print "RESPONSE STATUS: ",response.status
 
     if response.status == 302:
         redirectLocation = response.getheader("Location")
