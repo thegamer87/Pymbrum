@@ -27,7 +27,7 @@ TIMBR_CAUSE_FIELD = "CAUSETIMBR"
 TIMBR_TYPE_FIELD = "TYPETIMBR"
 TIMBR_IP_FIELD = "IPTIMBR"
 
-minExitTime = {"https://hr.cineca.it/HRPortal":datetime.timedelta(minutes=30), "https://saas.hrzucchetti.it/hrpmaxmara":datetime.timedelta(hours=1)}
+minExitTime = {"https://hr.cineca.it/HRPortal":datetime.timedelta(minutes=30), "https://saas.hrzucchetti.it/hrpmaxmara":datetime.timedelta(hours=30)}
 dayWorkTime={"https://hr.cineca.it/HRPortal":datetime.timedelta(hours=7, minutes=12), "https://saas.hrzucchetti.it/hrpmaxmara":datetime.timedelta(hours=8)}
 
 class Timbratura:
