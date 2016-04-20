@@ -2,7 +2,7 @@ from datetime import timedelta
 from flask import Flask
 import sys, logging
 
-app = Flask(__name__)
+application = Flask(__name__)
 sessionKey = "user"
 
 

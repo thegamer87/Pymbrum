@@ -7,7 +7,7 @@ from flask import request
 from flask import session
 from flask import render_template
 
-from wsgi import app, sessionKey
+from wsgi import application as app, sessionKey
 
 from hr import Login
 from hr import TimeManager
