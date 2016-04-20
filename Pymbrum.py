@@ -3,20 +3,17 @@ import datetime
 from datetime import timedelta
 import Cookie
 
-from flask import Flask
 from flask import request
 from flask import session
 from flask import render_template
 
+from wsgi import app, sessionKey
+
 from hr import Login
-from hr.Login import LoginResult
 from hr import TimeManager
-from hr.TimeManager import Timbratura
 from hr import PhoneManager
 
 
-app = Flask(__name__)
-sessionKey = "user"
 
 class UserSession:
     def __init__(self, username=None, host=None, cookie=None, date=None, surname=None):
