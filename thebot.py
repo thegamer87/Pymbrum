@@ -1,5 +1,5 @@
 import telepot
-from wsgi import application as app
+from Pymbrum import app
 
 @app.route('/thebot/test', methods=['POST','GET'])
 def the_bot_test():

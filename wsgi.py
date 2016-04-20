@@ -1,10 +1,7 @@
 from datetime import timedelta
-from flask import Flask
 import sys, logging
 
-application = Flask(__name__)
-sessionKey = "user"
-
+from Pymbrum import app as application
 
 logging.basicConfig(stream = sys.stderr)
 application.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
