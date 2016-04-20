@@ -7,5 +7,5 @@ sessionKey = "user"
 
 
 logging.basicConfig(stream = sys.stderr)
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-app.permanent_session_lifetime = timedelta(hours=1)
+application.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+application.permanent_session_lifetime = timedelta(hours=1)
